@@ -1,0 +1,56 @@
+SELECT title FROM movies;
+
+SELECT title, year_released FROM movies ORDER BY year_released DESC;
+
+SELECT * FROM directors ORDER BY country ASC;
+
+SELECT * FROM directors ORDER BY country ASC, last_name ASC;
+
+INSERT INTO directors (first_name, last_name, country)
+VALUES ('Rob', 'Reiner', 'USA');
+
+SELECT last_name, director_id FROM directors WHERE first_name = 'Rob' AND last_name = 'Reiner';
+
+INSERT INTO movies (title, year_released, director_id)
+VALUES ('The Princess Bride', 1987, (SELECT director_id FROM directors WHERE first_name = 'Rob' AND last_name = 'Reiner' limit 1));
+
+SELECT movies.title, movies.year_released, directors.last_name
+FROM movies
+INNER JOIN directors ON movies.director_id = directors.director_id
+ORDER BY directors.last_name;
+
+SELECT movies.title, movies.year_released, directors.first_name, directors.last_name
+FROM movies
+INNER JOIN directors ON movies.director_id = directors.director_id
+ORDER BY directors.last_name;
+
+SELECT directors.first_name, directors.last_name
+FROM movies
+INNER JOIN directors ON movies.director_id = directors.director_id
+WHERE movies.title = 'The Incredibles';
+
+SELECT directors.last_name, directors.country
+FROM movies
+INNER JOIN directors ON movies.director_id = directors.director_id
+WHERE movies.title = 'Roma';
+
+-- Delete a row from the movies table
+DELETE FROM movies WHERE title = 'The Movie';
+
+-- List contents of both tables
+SELECT * FROM movies;
+SELECT * FROM directors;
+
+-- Try to delete a person from the directors table
+DELETE FROM directors WHERE last_name = 'Reiner';
+
+SELECT m.title AS movie_title, m.year_released, d.first_name AS director_first_name, d.last_name AS director_last_name
+FROM movies m
+INNER JOIN directors d ON m.director_id = d.director_id
+WHERE d.last_name = 'Jackson';
+
+ALTER TABLE movies ADD COLUMN earnings DECIMAL(10, 2);
+
+UPDATE movies SET earnings = 1000000 WHERE title = 'Movie1';
+UPDATE movies SET earnings = 1500000 WHERE title = 'Movie2';
+-- Continue updating for other movies
